@@ -48,7 +48,7 @@ When the ink! contract need to communicate with some other offchain component, i
 ![image-20211215135838950](assets/image-20211215113343926.png)
 
 
-Pseduo code for pushing a command to the Side VM:
+Pseduocode of pushing a command to the Side VM:
 
 ```Rust
 #[ink::contract]
@@ -79,7 +79,7 @@ mod flip {
 }
 ```
 
-Pseduo code for the service in Side VM:
+Pseduocode of the service in Side VM:
 
 ```Rust
 #[pink::side_command]
@@ -112,6 +112,7 @@ A happy path of a get_price sequence diagram:
 ## Unresolved problems
 
 - [ ] What if OOM on allocating a new Side VM? pRuntime panic?
-- [ ] How to cancel a CPU sensitive side task?
+- [ ] How to cancel a CPU intensive side task?
 - [ ] Is there any security or safety issue in the Side VM?
 - [ ] Is it OK that there are many contracts emits mq messages concurrently?
+- [ ] How to prevent a contract from DDoS attacking the worker?
