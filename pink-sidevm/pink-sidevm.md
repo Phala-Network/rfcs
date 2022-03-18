@@ -15,7 +15,7 @@ The codes runing inside a Side VM is provided by the `ink!` contract which is co
 ## Side VM Initialization
 Inside the WASM contract instance, the `ink!` contract code can optionally initiate a Side VM which is a isolated environment from the main `ink!` VM and is long-living in the background.
 
-The Side VM can be initiated by calling the `pink_extension::init_side_vm` function at the contract instantiation time and can be initiated only once.
+The Side VM can be initiated by calling the `pink_extension::init_side_vm` function at the contract instantiation time and can be initiated at most once.
 
 For example:
 
@@ -66,13 +66,14 @@ mod flip {
 
     impl PriceBot {
         #[ink(message)]
-        pub fn foo() {
+        pub fn foo(&self) {
             let duration = 2; // 2 blocks to process the side task
             pink::push_side_command(duration, "get_price", "btc/usd");
         }
 
         #[ink(message)]
-        pub fn get_price_result(price: Price) {
+        pub fn get_price_result(&self, price: Price) -> Result<()> {
+            pink::ensure_from_self(self)?;
             do_something_with_price(price);
         }
     }
@@ -107,7 +108,9 @@ A happy path of a get_price sequence diagram:
 
 ![image-20211215172428197](assets/image-20211215171614700.png)
 
-
+## Async runtime
+- No tokio/async-std.
+- TCP/UDP support is imcomplete.
 
 ## Unresolved problems
 
